@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voe na Frente</title>
+    <!-- Ícone da aba -->
+    <link rel="icon" href="airplane.png" type="image/png">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+
+            /* Adicione uma imagem de fundo */
+            background-image: url('./airplane.jpg');
+            /* Defina a imagem como cobrindo todo o fundo */
+            background-size: cover;
+            /* Centralize a imagem */
+            background-position: center;
+            /* Garanta que o conteúdo esteja à frente da imagem */
+            z-index: -1;
+        }
+
+        #top-bar {
+            background-color: #64B2D6;
+            color: #FFF;
+            padding: 10px;
+            text-align: center;
+        }
+
+        #input-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+            align-items: center;
+            width: 80%;
+            background-color: #e4edf1;
+            padding: 10px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .input-pair input {
+            flex: 1; /* Preenche o espaço disponível na div */
+            margin-right: 5px; /* Espaço entre os campos de entrada */
+        }
+
+        #input-container input[type="text"] {
+            padding: 10px;
+            border: none;
+            outline: none;
+            flex: 1;
+        }
+
+        #input-container button {
+            padding: 10px 20px;
+            background-color: #64B2D6;
+            color: #FFF;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .highlight {
+            color: #000000; /* Cor de destaque desejada */
+            /* Outros estilos de destaque, como tamanho da fonte, peso, etc. */
+        }
+
+        .icone {
+            width: 50px;
+            height: 50px;
+            vertical-align: middle; /* Alinha verticalmente com o texto */
+            margin-right: 10px; /* Espaço entre o ícone e o texto */
+        }
+
+        h1 {
+            display: inline-block; /* Para que o ícone e o texto fiquem em linha */
+        }
+
+        #input-container output {
+            padding: 10px 20px;
+            background-color: #93CFE7;
+            color: #FFF;
+            border: none;
+            outline: none;
+        }
+
+
+        @media (max-width: 1000px) {
+            #input-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            #input-container {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <div id="top-bar">
+        <h1>
+            <img src="./airplane-icon.png" alt="Ícone" class="icone">
+            <span class="highlight">Voe na Frente:</span> Preveja Atrasos com Precisão
+        </h1>
+    </div>
+    
+    <div id="input-container">
+        <input type="text" id="Year" placeholder="Ano" required>
+        <input type="text" id="Month" placeholder="Mês" required>
+        <input type="text" id="Flight_Number_Marketing_Airline" placeholder="Número do Voo" required>
+        <input type="text" id="CRSDepTime" placeholder="Hora de partida CRS (local time: hhmm)" required>
+        <input type="text" id="DepDelayMinutes" placeholder="Diferença em min entre o horário de partida programado e o real." required>
+        <input type="text" id="OriginAirportID" placeholder="ID do aeroporto de origem" required>
+        <input type="text" id="DestAirportID" placeholder="ID do aeroporto de destino" required>
+        <input type="text" id="TaxiOut" placeholder="Tempo de saída de táxi da aeronave em min" required>
+        <input type="text" id="TaxiIn" placeholder="Tempo de taxi da aeronave em min" required>
+        <input type="text" id="Airline" placeholder="Nome da companhia aérea" required>
+        
+        <button id="botao">Prever</button>
+        <output type="text" id="result"><b>O atraso do voo é de ... minutos</b></output>
+    </div>
+    
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $("#botao").on('click', function() {
+                // Obtenha os valores dos campos do formulário
+                var Year = parseInt($("#Year").val()) || 0;
+                var Month = parseInt($("#Month").val()) || 0;
+                var Flight_Number_Marketing_Airline = parseInt($("#Flight_Number_Marketing_Airline").val()) || 0;
+                var CRSDepTime = parseInt($("#CRSDepTime").val()) || 0;
+                var DepDelayMinutes = parseFloat($("#DepDelayMinutes").val()) || 0.0;
+                var OriginAirportID = parseInt($("#OriginAirportID").val()) || 0;
+                var DestAirportID = parseInt($("#DestAirportID").val()) || 0;
+                var TaxiOut = parseFloat($("#TaxiOut").val()) || 0.0;
+                var TaxiIn = parseFloat($("#TaxiIn").val()) || 0.0;
+                var Airline = $("#Airline").val();
+
+                var newFlight = [
+                    Year,
+                    Month,
+                    Flight_Number_Marketing_Airline,
+                    CRSDepTime,
+                    DepDelayMinutes,
+                    OriginAirportID,
+                    DestAirportID,
+                    TaxiOut,
+                    TaxiIn,
+                    Airline,
+                    ];
+
+                $.ajax({
+                    url: '/prever',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(newFlight),
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(newFlight)
+
+                        // A previsão está disponível em data.previsao
+                        var predictedDelay = data.previsao;
+
+                        // Arredonde para duas casas decimais
+                        predictedDelay = predictedDelay.toFixed(2);
+        
+                        // Exiba o preço formatado
+                        $('#result').html('<b> O atraso do voo é de $ ' + predictedDelay + ' minutos</b>');
+                    },
+                    error: function() {
+                        alert('Erro ao fazer a previsão.');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
