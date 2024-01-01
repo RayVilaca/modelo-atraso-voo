@@ -1,7 +1,6 @@
 
 import pickle
 import warnings
-import pandas as pd
 from flask import Flask, render_template, request, jsonify
 
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -20,8 +19,7 @@ def prever():
     arq.close()
     
     data = request.get_json()
-    
-    # Criando um DataFrame com base nos dados
+
     columns = [
         'CRSDepTime',
         'ArrTime',
@@ -92,23 +90,20 @@ def prever():
         'Quarter_2',
         'Quarter_3',
         'Quarter_4']
+    
+    input_data = {}
+    data_final = data[0:-4] + [0] * 47
+    
+    for i in range(len(data_final)):
+        input_data[columns[i]] = data_final[i]
+    
+    input_data[data[-4]] = 1
+    input_data[data[-3]] = 1
+    input_data[data[-2]] = 1
+    input_data[data[-1]] = 1
 
-    df = pd.DataFrame([data[0:-4] + [0] * 47], columns=columns)
-    
-    df[data[-4]] = 1
-    df[data[-3]] = 1
-    df[data[-2]] = 1
-    df[data[-1]] = 1
-    
-    print(df.info())
-    
-    # Processa os dados do formulário e faz previsões usando o modelo
-    # Retorna as previsões como JSON
-    resultado = modelo.predict([df.iloc[0]])[0]
-    
-    if resultado < 0.0:
-        resultado = 0.0
-    
+    resultado = modelo.predict([list(input_data.values())])[0]
+
     return jsonify({'previsao': resultado})
 
 if __name__ == '__main__':
