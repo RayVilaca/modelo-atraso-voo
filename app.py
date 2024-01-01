@@ -25,72 +25,91 @@ def prever():
     
     # Criando um DataFrame com base nos dados
     columns = [
-        'Year',
-        'Month',
-        'Flight_Number_Marketing_Airline',
-        'Cancelled',
-        'Diverted',
         'CRSDepTime',
-        'DepTime',
+        'ArrTime',
+        'AirTime',
+        'Year',
+        'DOT_ID_Marketing_Airline',
+        'Flight_Number_Marketing_Airline',
+        'DOT_ID_Operating_Airline',
         'OriginAirportID',
+        'OriginCityMarketID',
+        'OriginStateFips',
+        'OriginWac',
         'DestAirportID',
+        'DestCityMarketID',
+        'DestStateFips',
+        'DestWac',
+        'DepDel15',
+        'DepartureDelayGroups',
         'TaxiOut',
         'TaxiIn',
         'CRSArrTime',
-        'ArrTime',
-        'ArrDelayMinutes',
-        'Airline_Alaska Airlines Inc.',
-        'Airline_Allegiant Air',
+        'ArrDel15',
+        'DivAirportLandings',
         'Airline_American Airlines Inc.',
-        'Airline_Cape Air',
-        'Airline_Capital Cargo International',
-        'Airline_Comair Inc.',
-        'Airline_Commutair Aka Champlain Enterprises, Inc.',
-        'Airline_Compass Airlines',
         'Airline_Delta Air Lines Inc.',
-        'Airline_Empire Airlines Inc.',
-        'Airline_Endeavor Air Inc.',
-        'Airline_Envoy Air',
-        'Airline_ExpressJet Airlines Inc.',
-        'Airline_Frontier Airlines Inc.',
-        'Airline_GoJet Airlines, LLC d/b/a United Express',
-        'Airline_Hawaiian Airlines Inc.',
-        'Airline_Horizon Air',
-        'Airline_JetBlue Airways',
-        'Airline_Mesa Airlines Inc.',
-        'Airline_Peninsula Airways Inc.',
-        'Airline_Republic Airlines',
         'Airline_SkyWest Airlines Inc.',
         'Airline_Southwest Airlines Co.',
-        'Airline_Spirit Air Lines',
-        'Airline_Trans States Airlines',
         'Airline_United Air Lines Inc.',
-        'Airline_Virgin America']
+        'DayofMonth_1',
+        'DayofMonth_2',
+        'DayofMonth_3',
+        'DayofMonth_4',
+        'DayofMonth_5',
+        'DayofMonth_6',
+        'DayofMonth_7',
+        'DayofMonth_8',
+        'DayofMonth_9',
+        'DayofMonth_10',
+        'DayofMonth_11',
+        'DayofMonth_12',
+        'DayofMonth_13',
+        'DayofMonth_14',
+        'DayofMonth_15',
+        'DayofMonth_16',
+        'DayofMonth_17',
+        'DayofMonth_18',
+        'DayofMonth_19',
+        'DayofMonth_20',
+        'DayofMonth_21',
+        'DayofMonth_22',
+        'DayofMonth_23',
+        'DayofMonth_24',
+        'DayofMonth_25',
+        'DayofMonth_26',
+        'DayofMonth_27',
+        'DayofMonth_28',
+        'DayofMonth_29',
+        'DayofMonth_30',
+        'DayofMonth_31',
+        'DayOfWeek_1',
+        'DayOfWeek_2',
+        'DayOfWeek_3',
+        'DayOfWeek_4',
+        'DayOfWeek_5',
+        'DayOfWeek_6',
+        'DayOfWeek_7',
+        'Quarter_1',
+        'Quarter_2',
+        'Quarter_3',
+        'Quarter_4']
 
-    df = pd.DataFrame([data], columns=columns)
-
-    print(data)
+    df = pd.DataFrame([data[0:-4] + [0] * 47], columns=columns)
     
-    categorical_cols = df.select_dtypes(include=['object']).columns
+    df[data[-4]] = 1
+    df[data[-3]] = 1
+    df[data[-2]] = 1
+    df[data[-1]] = 1
     
-    # Aplicar OneHotEncoder nas variaveis categoricas
-    ohe = OneHotEncoder(handle_unknown='ignore', drop='first')
-    encoded_vars = ohe.fit_transform(df[categorical_cols]).toarray()
-    encoded_vars_df = pd.DataFrame(encoded_vars, columns=ohe.get_feature_names_out(categorical_cols))
-
-    print(df[categorical_cols])
-    print("="*10)
-    print(encoded_vars_df)
-    print("="*10)
-
+    print(df.info())
+    
     # Processa os dados do formulário e faz previsões usando o modelo
     # Retorna as previsões como JSON
-    # resultado = modelo.predict([data])[0]
+    resultado = modelo.predict([df.iloc[0]])[0]
     
-    # if resultado < 0.0:
-    #     resultado = 0.0
-    
-    resultado = 0.0
+    if resultado < 0.0:
+        resultado = 0.0
     
     return jsonify({'previsao': resultado})
 
