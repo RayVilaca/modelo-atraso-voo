@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voe na Frente</title>
     <!-- Ícone da aba -->
-    <link rel="icon" href="airplane.png" type="image/png">
+    <link rel="icon" href="static/airplane.png" type="image/png">
     <style>
         * {
             box-sizing: border-box;
@@ -16,8 +16,10 @@
             margin: 0;
             padding: 0;
 
+            /* background-color: #64B2D6; */
+
             /* Adicione uma imagem de fundo */
-            background-image: url('./airplane.jpg');
+            background-image: url('static/airplane.jpg');
             /* Defina a imagem como cobrindo todo o fundo */
             background-size: cover;
             /* Centralize a imagem */
@@ -27,23 +29,33 @@
         }
 
         #top-bar {
-            background-color: #64B2D6;
+            background-color: #53aad3;
             color: #FFF;
             padding: 10px;
             text-align: center;
         }
 
+        /* Estilo para o label */
+        label {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
         #input-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-gap: 10px;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 8px 20px;
             align-items: center;
-            width: 80%;
-            background-color: #e4edf1;
+            width: 50%;
+            background-color: #dcebf1;
             padding: 10px;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
             padding-top: 20px;
             margin-left: auto;
+            margin-top: 10px;
             margin-right: auto;
         }
 
@@ -59,6 +71,16 @@
             flex: 1;
         }
 
+        .label-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            width: 100%;
+            display: grid;
+            align-items: center;
+            grid-gap: 10px;
+        }
+
         #input-container button {
             padding: 10px 20px;
             background-color: #64B2D6;
@@ -66,6 +88,14 @@
             border: none;
             outline: none;
             cursor: pointer;
+        }
+
+        /* Estilo para o select */
+        #input-container select {
+            padding: 10px; /* Espaçamento interno */
+            border: none; /* Remova a borda padrão */
+            outline: none; /* Remova o contorno ao focar */
+            background-color: #FFF;
         }
 
         .highlight {
@@ -92,16 +122,28 @@
             outline: none;
         }
 
+        #result {
+            text-align: center;
+        }
+
+        @media (max-width: 1400px) {
+            #input-container {
+                grid-template-columns: repeat(1, 1fr);
+                width: 40%;
+            }
+        }
 
         @media (max-width: 1000px) {
             #input-container {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(1, 1fr);
+                width: 50%;
             }
         }
 
         @media (max-width: 600px) {
             #input-container {
                 grid-template-columns: repeat(1, 1fr);
+                width: 65%;
             }
         }
 
@@ -111,23 +153,181 @@
 <body>
     <div id="top-bar">
         <h1>
-            <img src="./airplane-icon.png" alt="Ícone" class="icone">
+            <img src="static/airplane-icon.png" alt="Ícone" class="icone">
             <span class="highlight">Voe na Frente:</span> Preveja Atrasos com Precisão
         </h1>
     </div>
     
     <div id="input-container">
-        <input type="text" id="Year" placeholder="Ano" required>
-        <input type="text" id="Month" placeholder="Mês" required>
-        <input type="text" id="Flight_Number_Marketing_Airline" placeholder="Número do Voo" required>
-        <input type="text" id="CRSDepTime" placeholder="Hora de partida CRS (local time: hhmm)" required>
-        <input type="text" id="DepDelayMinutes" placeholder="Diferença em min entre o horário de partida programado e o real." required>
-        <input type="text" id="OriginAirportID" placeholder="ID do aeroporto de origem" required>
-        <input type="text" id="DestAirportID" placeholder="ID do aeroporto de destino" required>
-        <input type="text" id="TaxiOut" placeholder="Tempo de saída de táxi da aeronave em min" required>
-        <input type="text" id="TaxiIn" placeholder="Tempo de taxi da aeronave em min" required>
-        <input type="text" id="Airline" placeholder="Nome da companhia aérea" required>
+        <div class="label-input">
+            <label for="CRSDepTime">Hora de partida CRS (local time: HHMM):</label>
+            <input type="text" id="CRSDepTime" placeholder="1100" required pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]">
+        </div>
         
+        <div class="label-input">
+            <label for="ArrTime">Tempo de chegada ocorrido (local time: HHMM):</label>
+            <input type="text" id="ArrTime" placeholder="1236" required>
+        </div>
+        <div class="label-input">
+            <label for="AirTime">Tempo de voo, em minutos:</label>
+            <input type="text" id="AirTime" placeholder="52" required>
+        </div>
+        <div class="label-input">
+            <label for="Year">Ano:</label>
+            <input type="text" id="Year" placeholder="2018" required>
+        </div>
+        <div class="label-input">
+            <label for="Quarter">Trimestre:</label>
+            <select id="Quarter">
+                <option value="Quarter_1" selected>Janeiro-Março</option>
+                <option value="Quarter_2">Abril-Junho</option>
+                <option value="Quarter_3">Julho-Agosto</option>
+                <option value="Quarter_4">Outubro-Dezembro</option>
+            </select>
+        </div>
+
+        <div class="label-input">
+            <label for="DOT_ID_Marketing_Airline">Código de identificação construido pelo US DOT:</label>
+            <input type="text" id="DOT_ID_Marketing_Airline" placeholder="19790" required>
+        </div>
+        <div class="label-input">
+            <label for="Flight_Number_Marketing_Airline">Número do Voo:</label>
+            <input type="text" id="Flight_Number_Marketing_Airline" placeholder="4599" required>
+        </div>
+        <div class="label-input">
+            <label for="DOT_ID_Operating_Airline">Número de identificação atribuído pelo US DOT:</label>
+            <input type="text" id="DOT_ID_Operating_Airline" placeholder="20304" required>
+        </div>
+        <div class="label-input">
+            <label for="OriginAirportID">ID do aeroporto de origem:</label>
+            <input type="text" id="OriginAirportID" placeholder="14869" required>
+        </div>
+        <div class="label-input">
+        <label for="OriginCityMarketID">Identificação do Mercado/Região Municipal no aeroporto de origem:</label>
+        <input type="text" id="OriginCityMarketID" placeholder="34614" required>
+    </div>
+    <div class="label-input">
+        <label for="OriginStateFips">Codigo FIPs do estado do aeroporto de origem:</label>
+        <input type="text" id="OriginStateFips" placeholder="49" required>
+    </div>
+    <div class="label-input">
+        <label for="OriginWac">World Area Code do aeroporto de origem:</label>
+        <input type="text" id="OriginWac" placeholder="87" required>
+        </div>
+        <div class="label-input">
+        <label for="DestAirportID">ID do aeroporto de destino:</label>
+        <input type="text" id="DestAirportID" placeholder="10620" required>
+        </div>
+        <div class="label-input">
+        <label for="DestCityMarketID">ID do mercado/regiáo da cidade no aeroporto de destino:</label>
+        <input type="text" id="DestCityMarketID" placeholder="30620" required>
+        </div>
+        <div class="label-input">
+        <label for="DestStateFips">Codigo FIPs do estado do aeroporto de destino:</label>
+        <input type="text" id="DestStateFips" placeholder="30" required>
+        </div>
+        <div class="label-input">
+        <label for="DestWac">World Area Code do aeroporto de destino:</label>
+        <input type="text" id="DestWac" placeholder="84" required>
+        </div>
+
+        <div class="label-input">
+        <label for="DepDel15">Houve atraso de 15 minutos ou mais na partida?</label>
+        <select id="DepDel15">
+            <option value="0">Não</option>
+            <option value="1">Sim</option>
+        </select>
+        </div>
+
+        <div class="label-input">
+            <label for="DepartureDelayGroups">Intervalos de atraso de partida:</label>
+            <input type="text" id="DepartureDelayGroups" placeholder="0" required>
+        </div>
+        <div class="label-input">
+            <label for="TaxiOut">Tempo de saída de táxi da aeronave em min:</label>
+            <input type="text" id="TaxiOut" placeholder="34" required>
+        </div>
+        <div class="label-input">
+            <label for="TaxiIn">Tempo de taxi da aeronave em min:</label>
+            <input type="text" id="TaxiIn" placeholder="3" required>
+        </div>
+        <div class="label-input">
+            <label for="CRSArrTime">CRS tempo de chegada (local time: HHMM):</label>
+            <input type="text" id="CRSArrTime" placeholder="1243" required pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]">
+        </div>
+        <div class="label-input">
+            <label for="ArrDel15">Houve atraso de 15 minutos ou mais na chegada?</label>
+            <select id="ArrDel15">
+                <option value="0">Não</option>
+                <option value="1">Sim</option>
+            </select>
+        </div>
+
+        <div class="label-input">
+            <label for="DivAirportLandings">Número de pousos desviados no aeroporto:</label>
+            <input type="text" id="DivAirportLandings" placeholder="0" required>
+        </div>
+        <div class="label-input">
+            <label for="Airline">Selecione a companhia aérea:</label>
+            <select id="Airline">
+                <option value="Airline_Southwest Airlines Co.">Southwest Airlines Co.</option>
+                <option value="Airline_SkyWest Airlines Inc." selected>SkyWest Airlines Inc.</option>
+                <option value="Airline_Delta Air Lines Inc.">Delta Air Lines Inc.</option>
+                <option value="Airline_American Airlines Inc.">American Airlines Inc.</option>
+                <option value="Airline_United Air Lines Inc.">United Air Lines Inc.</option>
+            </select>
+        </div>
+
+        <div class="label-input">
+            <label for="DayofMonth">Selecione o dia do mês:</label>
+            <select id="DayofMonth">
+                <option value="DayofMonth_1">1</option>
+                <option value="DayofMonth_2">2</option>
+                <option value="DayofMonth_3">3</option>
+                <option value="DayofMonth_4">4</option>
+                <option value="DayofMonth_5">5</option>
+                <option value="DayofMonth_6">6</option>
+                <option value="DayofMonth_7">7</option>
+                <option value="DayofMonth_8">8</option>
+                <option value="DayofMonth_9">9</option>
+                <option value="DayofMonth_10">10</option>
+                <option value="DayofMonth_11">11</option>
+                <option value="DayofMonth_12">12</option>
+                <option value="DayofMonth_13">13</option>
+                <option value="DayofMonth_14">14</option>
+                <option value="DayofMonth_15">15</option>
+                <option value="DayofMonth_16">16</option>
+                <option value="DayofMonth_17">17</option>
+                <option value="DayofMonth_18">18</option>
+                <option value="DayofMonth_19">19</option>
+                <option value="DayofMonth_20" selected>20</option>
+                <option value="DayofMonth_21">21</option>
+                <option value="DayofMonth_22">22</option>
+                <option value="DayofMonth_23">23</option>
+                <option value="DayofMonth_24">24</option>
+                <option value="DayofMonth_25">25</option>
+                <option value="DayofMonth_26">26</option>
+                <option value="DayofMonth_27">27</option>
+                <option value="DayofMonth_28">28</option>
+                <option value="DayofMonth_29">29</option>
+                <option value="DayofMonth_30">30</option>
+                <option value="DayofMonth_31">31</option>
+            </select>
+        </div>
+
+        <div class="label-input">
+            <label for="DayOfWeek">Selecione o dia da semana:</label>
+            <select id="DayOfWeek">
+                <option value="DayOfWeek_1">Segunda</option>
+                <option value="DayOfWeek_2">Terça</option>
+                <option value="DayOfWeek_3">Quarta</option>
+                <option value="DayOfWeek_4">Quinta</option>
+                <option value="DayOfWeek_5">Sexta</option>
+                <option value="DayOfWeek_6" selected>Sábado</option>
+                <option value="DayOfWeek_7">Domingo</option>
+            </select>
+        </div>
+
         <button id="botao">Prever</button>
         <output type="text" id="result"><b>O atraso do voo é de ... minutos</b></output>
     </div>
@@ -137,29 +337,77 @@
         $(document).ready(function() {
             $("#botao").on('click', function() {
                 // Obtenha os valores dos campos do formulário
+                const regex = /^([01]?[0-9]|2[0-3])[0-5][0-9]$/;
+                var CRSDepTime = $("#CRSDepTime").val();
+
+                if (!regex.test(CRSDepTime)) {
+                    alert('Por favor, insira a hora no formato HHMM (24 horas).');
+                } else {
+                    CRSDepTime = parseInt($("#CRSDepTime").val()) || 0;
+                }
+                var ArrTime = $("#ArrTime").val();
+
+                if (!regex.test(ArrTime)) {
+                    alert('Por favor, insira a hora no formato HHMM (24 horas).');
+                } else {
+                    ArrTime = parseInt($("#ArrTime").val()) || 0;
+                }
+
+                var AirTime = parseFloat($("#AirTime").val()) || 0.0;
                 var Year = parseInt($("#Year").val()) || 0;
-                var Month = parseInt($("#Month").val()) || 0;
+                var Quarter = $("#Quarter").val();
+                var DOT_ID_Marketing_Airline = parseInt($("#DOT_ID_Marketing_Airline").val()) || 0;
                 var Flight_Number_Marketing_Airline = parseInt($("#Flight_Number_Marketing_Airline").val()) || 0;
-                var CRSDepTime = parseInt($("#CRSDepTime").val()) || 0;
-                var DepDelayMinutes = parseFloat($("#DepDelayMinutes").val()) || 0.0;
+                var DOT_ID_Operating_Airline = parseInt($("#DOT_ID_Operating_Airline").val()) || 0;
                 var OriginAirportID = parseInt($("#OriginAirportID").val()) || 0;
+                var OriginCityMarketID = parseInt($("#OriginCityMarketID").val()) || 0;
+                var OriginStateFips = parseInt($("#OriginStateFips").val()) || 0;
+                var OriginWac = parseInt($("#OriginWac").val()) || 0;
                 var DestAirportID = parseInt($("#DestAirportID").val()) || 0;
+                var DestCityMarketID = parseInt($("#DestCityMarketID").val()) || 0;
+                var DestStateFips = parseInt($("#DestStateFips").val()) || 0;
+                var DestWac = parseInt($("#DestWac").val()) || 0;
+                var DepDel15 = parseInt($("#DepDel15").val()) || 0;
+                var DepartureDelayGroups = parseFloat($("#DepartureDelayGroups").val()) || 0;
                 var TaxiOut = parseFloat($("#TaxiOut").val()) || 0.0;
                 var TaxiIn = parseFloat($("#TaxiIn").val()) || 0.0;
+                var CRSArrTime = parseInt($("#CRSArrTime").val()) || 0.0;
+                var ArrDel15 = parseInt($("#ArrDel15").val()) || 0;
+                var DivAirportLandings = parseFloat($("#DivAirportLandings").val()) || 0;
+                
+                var DayofMonth = $("#DayofMonth").val();
+                var DayOfWeek = $("#DayOfWeek").val();
+
                 var Airline = $("#Airline").val();
 
                 var newFlight = [
-                    Year,
-                    Month,
-                    Flight_Number_Marketing_Airline,
                     CRSDepTime,
-                    DepDelayMinutes,
+                    ArrTime,
+                    AirTime,
+                    Year,
+                    DOT_ID_Marketing_Airline,
+                    Flight_Number_Marketing_Airline,
+                    DOT_ID_Operating_Airline,
                     OriginAirportID,
+                    OriginCityMarketID,
+                    OriginStateFips,
+                    OriginWac,
                     DestAirportID,
+                    DestCityMarketID,
+                    DestStateFips,
+                    DestWac,
+                    DepDel15,
+                    DepartureDelayGroups,
                     TaxiOut,
                     TaxiIn,
+                    CRSArrTime,
+                    ArrDel15,
+                    DivAirportLandings,
                     Airline,
-                    ];
+                    DayofMonth,
+                    DayOfWeek,
+                    Quarter
+                ];
 
                 $.ajax({
                     url: '/prever',
@@ -177,7 +425,7 @@
                         predictedDelay = predictedDelay.toFixed(2);
         
                         // Exiba o preço formatado
-                        $('#result').html('<b> O atraso do voo é de $ ' + predictedDelay + ' minutos</b>');
+                        $('#result').html('<b> O atraso do voo é de ' + predictedDelay + ' minutos</b>');
                     },
                     error: function() {
                         alert('Erro ao fazer a previsão.');
