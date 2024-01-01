@@ -1,10 +1,8 @@
 
 import pickle
 import warnings
-import numpy as np
 import pandas as pd
 from flask import Flask, render_template, request, jsonify
-from sklearn.preprocessing import OneHotEncoder
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
