@@ -422,7 +422,7 @@
                         var predictedDelay = data.previsao;
 
                         // Arredonde para duas casas decimais
-                        predictedDelay = predictedDelay.toFixed(2);
+                        predictedDelay = floor(predictedDelay);
         
                         // Exiba o preço formatado
                         $('#result').html('<b> O atraso do voo é de ' + predictedDelay + ' minutos</b>');
